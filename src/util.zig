@@ -5,6 +5,7 @@ const Io = std.Io;
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+// random num generator
 pub const Rand = struct {
     engine: std.Random.Xoshiro256,
 
@@ -15,16 +16,19 @@ pub const Rand = struct {
         };
     }
 
+    // get a u32 of max value "max"
     pub fn randInt(self: *Rand, max: u32) u32 {
         return self.engine.random().intRangeLessThan(u32, 0, max);
     }
 
+    // get the rand directly to call int(u64) etc.
     pub fn rand(self: *Rand) std.Random {
         return self.engine.random();
     }
 
+    // get a random string of a given size
+    // valid chars: a-zA-Z0-9
     // caller must free the returned slice themselves
-    // a-zA-Z0-9
     pub fn randStr(self: *Rand, a: Alloc, size: u64) ![]u8 {
         var chars = try a.alloc(u8, size);
         for (0..size) |i| {
@@ -35,6 +39,9 @@ pub const Rand = struct {
     }
 };
 
+// keep a running average for a timed operation
+// surround timed area with start()/end()
+// will print current avg ns/cycle to log.debug every N cycles
 pub const Timer = struct {
     cycles_per_print: u32,
     cycles: u64 = 0,
@@ -64,7 +71,7 @@ pub const Timer = struct {
         self.avg_nanos_per_cycle = total_time_float / cycles_float;
 
         if (self.cycles % self.cycles_per_print == 0) {
-            std.debug.print("{d} {d:.2} {d}\n", .{self.cycles, self.avg_nanos_per_cycle, self.total_time});
+            std.log.debug("{d} {d:.2} {d}", .{self.cycles, self.avg_nanos_per_cycle, self.total_time});
         }
     }
 };

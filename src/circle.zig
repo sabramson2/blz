@@ -4,6 +4,13 @@ const Alloc = std.mem.Allocator;
 const p = std.log.debug;
 const p2 = std.debug.print;
 
+pub const CircleGen = struct {
+    // map to hold pre-computed edges
+    edges: std.AutoHashMap(u32, []u32),
+
+    //pub fn gen() 
+};
+
 pub fn circleFun(al: Alloc) !void {
     const r = 30;
     const edges = try findCircleEdge(al, r);
