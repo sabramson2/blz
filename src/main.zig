@@ -9,7 +9,8 @@ pub fn main(init: std.process.Init) !void {
     std.log.debug("hello from {s}", .{"main"});
     const a = init.gpa;
 
-    try listTest(a);
+    try blz.circle.circleFun(a);
+    //try listTest(a);
 }
 
 fn listTest(_: Alloc) !void {
